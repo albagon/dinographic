@@ -74,7 +74,31 @@ function createHumanObject(data){
 
 
 // Generate Tiles for each Dino in Array
+function createTiles(dinos, human){
+  let tilesArray = [];
+  // Store the indexes of the dinos that have already been visited
+  let indexesUsed = [];
+  let randomIndex;
+  let randomDino;
+  let i = 0;
 
+  do {
+    randomIndex = Math.floor(Math.random() * dinos.length);
+
+    // Check if the randomIndex has already been visited
+    if(!indexesUsed.includes(randomIndex)){
+      i = i + 1;
+      indexesUsed.push(randomIndex);
+      randomDino = dinos[randomIndex];
+      console.log(`The random dino is ${randomDino.fact} with index: ${randomIndex}`);
+      console.log(`The array of indexes is: ${indexesUsed}`);
+      // TODO: compare 3 randomDino with human
+      // TODO: create tile for randomDino
+    }
+  } while(i < 8);
+
+  return tilesArray;
+}
     // Add tiles to DOM
 
 // Remove form from screen
@@ -86,4 +110,5 @@ button.addEventListener('click', () => {
   const human = createHumanObject(humanData.getData());
   console.log(dinoObjects);
   console.log(human);
+  const tiles = createTiles(dinoObjects, human);
 });
