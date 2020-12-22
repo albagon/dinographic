@@ -1,9 +1,39 @@
+// Get form button
+const button = document.getElementById('btn');
+// Fetch dino data from json file
+const dinos = (function (){
+  let dinoArray = ['nada'];
+  // Disable form button to prevent a comparison before the list of dinos
+  // has been populated.
+  button.disabled = true;
+
+  fetch('dino.json')
+    .then(response => response.json())
+    .then(data => dinoArray = data.Dinos)
+    .then(enable => button.disabled = false)
+    .catch(err => console.log(`Unable to read dino.json file: ${err}`));
+  return {
+    getList: function (){
+      return dinoArray;
+    }
+  };
+})();
 
 // Create Dino Constructor
-
+const animal = {
+  'species': 'Triceratops',
+  'weight': 0,
+  'height': 0,
+  'diet': '',
+  'fact': ''
+};
 
 // Create Dino Objects
-
+const dinoObjects = [];
+const dino1 = Object.create(animal);
+dinoObjects.push(dino1);
+console.log(`DinoObjects: ${dinoObjects[0].species}`);
+console.log(`Dinos list: ${dinos.getList()}`);
 
 // Create Human Object
 
@@ -47,5 +77,4 @@ const humanData = (function (){
 
 
 // On button click, prepare and display infographic
-const button = document.getElementById('btn');
 button.addEventListener('click', humanData.getHumanData);
