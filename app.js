@@ -70,10 +70,21 @@ function compareWeight(dino, human){
 
 // Create Dino Compare Method 2
 // NOTE: Weight in JSON file is in lbs, height in inches.
-
+function compareHeight(dino, human){
+  const timesTaller = dino.height / human.height;
+  return `The ${dino.species} is ${parseInt(timesTaller)} times taller that you!`;
+}
 
 // Create Dino Compare Method 3
 // NOTE: Weight in JSON file is in lbs, height in inches.
+function compareDiet(dino, human){
+  if(dino.diet.toLowerCase() == human.diet.toLowerCase()){
+    return `The ${dino.species} and you are both ${human.diet}!`;
+  } else {
+    return `The ${dino.species} is ${dino.diet} but you are ${human.diet}`;
+  }
+}
+
 function createTile(name, fact){
   let newTile = document.createElement('div');
   let title = document.createElement('h4');
@@ -94,12 +105,11 @@ function createTile(name, fact){
 // Generate Tiles for each Dino in Array
 function createTiles(dinos, human){
   let tilesArray = [];
-  // Store the indexes of the dinos that have already been visited
   let indexesUsed = [];
   let randomIndex;
   let randomDino;
   let i = 0;
-  let grid = document.getElementById('grid');
+  let j = 0;
 
   do {
     randomIndex = Math.floor(Math.random() * dinos.length);
@@ -109,14 +119,28 @@ function createTiles(dinos, human){
       i = i + 1;
       indexesUsed.push(randomIndex);
       randomDino = dinos[randomIndex];
-      console.log(`The random dino is ${randomDino.fact}`);
-      console.log(createTile(randomDino.species, compareWeight(randomDino, human)));
-      // TODO: compare 3 randomDino with human
-      // TODO: create tile for randomDino
+
+      if(randomDino.species.toLowerCase() == 'pigeon'){
+        tilesArray.push(createTile(randomDino.species, randomDino.fact));
+        console.log(createTile(randomDino.species, randomDino.fact));
+      } else if(j == 0) {
+        j = j + 1;
+        tilesArray.push(createTile(randomDino.species, compareWeight(randomDino, human)));
+        console.log(createTile(randomDino.species, compareWeight(randomDino, human)));
+      } else if(j == 1) {
+        j = j + 1;
+        tilesArray.push(createTile(randomDino.species, compareHeight(randomDino, human)));
+        console.log(createTile(randomDino.species, compareHeight(randomDino, human)));
+      } else if(j == 2) {
+        j = j + 1;
+        tilesArray.push(createTile(randomDino.species, compareDiet(randomDino, human)));
+        console.log(createTile(randomDino.species, compareDiet(randomDino, human)));
+      } else {
+        tilesArray.push(createTile(randomDino.species, randomDino.fact));
+        console.log(createTile(randomDino.species, randomDino.fact));
+      }
     }
   } while(i < 8);
-
-  console.log(`The array of indexes is: ${indexesUsed}`);
 
   return tilesArray;
 }
@@ -132,4 +156,5 @@ button.addEventListener('click', () => {
   console.log(dinoObjects);
   console.log(human);
   const tiles = createTiles(dinoObjects, human);
+  console.log(tiles);
 });
