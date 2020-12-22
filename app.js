@@ -19,21 +19,19 @@ const dinos = (function (){
   };
 })();
 
-// Create Dino Constructor
-const animal = {
-  'species': 'Triceratops',
-  'weight': 0,
-  'height': 0,
-  'diet': '',
-  'fact': ''
-};
+// Create Dino Constructor using functional mixins
+function Animal(object){
+  return Object.assign({}, object);
+}
 
 // Create Dino Objects
-const dinoObjects = [];
-const dino1 = Object.create(animal);
-dinoObjects.push(dino1);
-console.log(`DinoObjects: ${dinoObjects[0].species}`);
-console.log(`Dinos list: ${dinos.getList()}`);
+// @param array of all the dinos included in the json file
+function createDinoObjects(dinos){
+  const dinoObjects = [];
+
+  dinos.getList().forEach(ele => dinoObjects.push(Animal(ele)));
+  return dinoObjects;
+}
 
 // Create Human Object
 
@@ -77,4 +75,8 @@ const humanData = (function (){
 
 
 // On button click, prepare and display infographic
-button.addEventListener('click', humanData.getHumanData);
+button.addEventListener('click', () => {
+  humanData.getHumanData();
+  const dinoObjects = createDinoObjects(dinos);
+  console.log(dinoObjects);
+});
