@@ -85,21 +85,30 @@ function compareDiet(dino, human){
   }
 }
 
-function createTile(name, fact){
+function createTile(dino, fact){
   let newTile = document.createElement('div');
   newTile.className = 'grid-item';
   let title = document.createElement('h3');
-  title.innerHTML = name;
   let img = document.createElement('img');
-  img.src = 'images/' + name.toLowerCase() + '.png';
-  img.alt = 'An image of a ' + name;
+
+  if(dino.hasOwnProperty('species')){
+    title.innerHTML = dino.species;
+    img.src = 'images/' + dino.species.toLowerCase() + '.png';
+    img.alt = 'An image of a ' + dino.species;
+  } else {
+    // it is a human
+    title.innerHTML = dino.name;
+    img.src = 'images/human.png';
+    img.alt = 'An image of a human';
+  }
+
   let para = document.createElement('p');
   let text = document.createTextNode(fact);
   para.appendChild(text);
 
   newTile.append(title);
   newTile.append(img);
-  if(name != 'human'){
+  if(dino.hasOwnProperty('species')){
     newTile.append(para);
   }
 
@@ -125,22 +134,22 @@ function createTiles(dinos, human){
       randomDino = dinos[randomIndex];
 
       if(randomDino.species.toLowerCase() == 'pigeon'){
-        tilesArray.push(createTile(randomDino.species, randomDino.fact));
+        tilesArray.push(createTile(randomDino, randomDino.fact));
         console.log(createTile(randomDino.species, randomDino.fact));
       } else if(j == 0) {
         j = j + 1;
-        tilesArray.push(createTile(randomDino.species, compareWeight(randomDino, human)));
+        tilesArray.push(createTile(randomDino, compareWeight(randomDino, human)));
         console.log(createTile(randomDino.species, compareWeight(randomDino, human)));
       } else if(j == 1) {
         j = j + 1;
-        tilesArray.push(createTile(randomDino.species, compareHeight(randomDino, human)));
+        tilesArray.push(createTile(randomDino, compareHeight(randomDino, human)));
         console.log(createTile(randomDino.species, compareHeight(randomDino, human)));
       } else if(j == 2) {
         j = j + 1;
-        tilesArray.push(createTile(randomDino.species, compareDiet(randomDino, human)));
+        tilesArray.push(createTile(randomDino, compareDiet(randomDino, human)));
         console.log(createTile(randomDino.species, compareDiet(randomDino, human)));
       } else {
-        tilesArray.push(createTile(randomDino.species, randomDino.fact));
+        tilesArray.push(createTile(randomDino, randomDino.fact));
         console.log(createTile(randomDino.species, randomDino.fact));
       }
     }
@@ -152,7 +161,7 @@ function createTiles(dinos, human){
 // Add tiles to DOM
 function addTilesToDOM(tiles, human){
   let grid = document.getElementById('grid');
-  const humanTile = createTile('human', '');
+  const humanTile = createTile(human, '');
   grid.appendChild(tiles[0]);
   grid.appendChild(tiles[1]);
   grid.appendChild(tiles[2]);
@@ -165,7 +174,10 @@ function addTilesToDOM(tiles, human){
 }
 
 // Remove form from screen
-
+function hideForm(){
+  let form = document.getElementById('dino-compare');
+  form.style.display = 'none';
+}
 
 // On button click, prepare and display infographic
 button.addEventListener('click', () => {
@@ -176,4 +188,5 @@ button.addEventListener('click', () => {
   const tiles = createTiles(dinoObjects, human);
   console.log(tiles);
   addTilesToDOM(tiles, human);
+  hideForm();
 });
