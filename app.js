@@ -65,14 +65,14 @@ function createHumanObject(data){
 // NOTE: Weight in JSON file is in lbs, height in inches.
 function compareWeight(dino, human){
   const timesHeavier = dino.weight / human.weight;
-  return `The ${dino.species} is ${parseInt(timesHeavier)} times heavier that you!`;
+  return `The ${dino.species} is ${parseInt(timesHeavier)} times heavier than you!`;
 }
 
 // Create Dino Compare Method 2
 // NOTE: Weight in JSON file is in lbs, height in inches.
 function compareHeight(dino, human){
   const timesTaller = dino.height / human.height;
-  return `The ${dino.species} is ${parseInt(timesTaller)} times taller that you!`;
+  return `The ${dino.species} is ${parseInt(timesTaller)} times taller than you!`;
 }
 
 // Create Dino Compare Method 3
@@ -81,23 +81,27 @@ function compareDiet(dino, human){
   if(dino.diet.toLowerCase() == human.diet.toLowerCase()){
     return `The ${dino.species} and you are both ${human.diet}!`;
   } else {
-    return `The ${dino.species} is ${dino.diet} but you are ${human.diet}`;
+    return `The ${dino.species} is ${dino.diet} but you are ${human.diet.toLowerCase()}`;
   }
 }
 
 function createTile(name, fact){
   let newTile = document.createElement('div');
-  let title = document.createElement('h4');
+  newTile.className = 'grid-item';
+  let title = document.createElement('h3');
   title.innerHTML = name;
   let img = document.createElement('img');
   img.src = 'images/' + name.toLowerCase() + '.png';
   img.alt = 'An image of a ' + name;
-  let desc = document.createElement('span');
-  desc.innerHTML = fact;
+  let para = document.createElement('p');
+  let text = document.createTextNode(fact);
+  para.appendChild(text);
 
   newTile.append(title);
   newTile.append(img);
-  newTile.append(fact);
+  if(name != 'human'){
+    newTile.append(para);
+  }
 
   return newTile;
 }
@@ -144,7 +148,21 @@ function createTiles(dinos, human){
 
   return tilesArray;
 }
-    // Add tiles to DOM
+
+// Add tiles to DOM
+function addTilesToDOM(tiles, human){
+  let grid = document.getElementById('grid');
+  const humanTile = createTile('human', '');
+  grid.appendChild(tiles[0]);
+  grid.appendChild(tiles[1]);
+  grid.appendChild(tiles[2]);
+  grid.appendChild(tiles[3]);
+  grid.appendChild(humanTile);
+  grid.appendChild(tiles[4]);
+  grid.appendChild(tiles[5]);
+  grid.appendChild(tiles[6]);
+  grid.appendChild(tiles[7]);
+}
 
 // Remove form from screen
 
@@ -157,4 +175,5 @@ button.addEventListener('click', () => {
   console.log(human);
   const tiles = createTiles(dinoObjects, human);
   console.log(tiles);
+  addTilesToDOM(tiles, human);
 });
