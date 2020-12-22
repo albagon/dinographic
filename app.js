@@ -1,8 +1,9 @@
 // Get form button
 const button = document.getElementById('btn');
+
 // Fetch dino data from json file
 const dinos = (function (){
-  let dinoArray = ['nada'];
+  let dinoArray = [''];
   // Disable form button to prevent a comparison before the list of dinos
   // has been populated.
   button.disabled = true;
@@ -15,6 +16,26 @@ const dinos = (function (){
   return {
     getList: function (){
       return dinoArray;
+    }
+  };
+})();
+
+// Use IIFE to get human data from form
+const humanData = (function (){
+  let name = document.getElementById('name');
+  let feet = document.getElementById('feet');
+  let inches = document.getElementById('inches');
+  let weight = document.getElementById('weight');
+  let diet = document.getElementById('diet');
+
+  return {
+    getData: function (){
+      return {
+      name: name.value,
+      height: (parseInt(feet.value) * 12) + parseInt(inches.value),
+      weight: parseInt(weight.value),
+      diet: diet.value
+      };
     }
   };
 })();
@@ -34,25 +55,10 @@ function createDinoObjects(dinos){
 }
 
 // Create Human Object
-
-// Use IIFE to get human data from form
-const humanData = (function (){
-  let name = document.getElementById('name');
-  let feet = document.getElementById('feet');
-  let inches = document.getElementById('inches');
-  let weight = document.getElementById('weight');
-  let diet = document.getElementById('diet');
-
-  return {
-    getHumanData: function (){
-      console.log(`This is the human name: ${name.value}`);
-      console.log(`This is the human feet: ${feet.value}`);
-      console.log(`This is the human inches: ${inches.value}`);
-      console.log(`This is the human weight: ${weight.value}`);
-      console.log(`This is the human diet: ${diet.value}`);
-    }
-  };
-})();
+// @param Object with the human data gathered from the form
+function createHumanObject(data){
+  return Animal(data);
+}
 
 
 // Create Dino Compare Method 1
@@ -76,7 +82,8 @@ const humanData = (function (){
 
 // On button click, prepare and display infographic
 button.addEventListener('click', () => {
-  humanData.getHumanData();
   const dinoObjects = createDinoObjects(dinos);
+  const human = createHumanObject(humanData.getData());
   console.log(dinoObjects);
+  console.log(human);
 });
