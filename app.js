@@ -63,7 +63,10 @@ function createHumanObject(data){
 
 // Create Dino Compare Method 1
 // NOTE: Weight in JSON file is in lbs, height in inches.
-
+function compareWeight(dino, human){
+  const timesHeavier = dino.weight / human.weight;
+  return `The ${dino.species} is ${parseInt(timesHeavier)} times heavier that you!`;
+}
 
 // Create Dino Compare Method 2
 // NOTE: Weight in JSON file is in lbs, height in inches.
@@ -71,7 +74,22 @@ function createHumanObject(data){
 
 // Create Dino Compare Method 3
 // NOTE: Weight in JSON file is in lbs, height in inches.
+function createTile(name, fact){
+  let newTile = document.createElement('div');
+  let title = document.createElement('h4');
+  title.innerHTML = name;
+  let img = document.createElement('img');
+  img.src = 'images/' + name.toLowerCase() + '.png';
+  img.alt = 'An image of a ' + name;
+  let desc = document.createElement('span');
+  desc.innerHTML = fact;
 
+  newTile.append(title);
+  newTile.append(img);
+  newTile.append(fact);
+
+  return newTile;
+}
 
 // Generate Tiles for each Dino in Array
 function createTiles(dinos, human){
@@ -81,6 +99,7 @@ function createTiles(dinos, human){
   let randomIndex;
   let randomDino;
   let i = 0;
+  let grid = document.getElementById('grid');
 
   do {
     randomIndex = Math.floor(Math.random() * dinos.length);
@@ -90,12 +109,14 @@ function createTiles(dinos, human){
       i = i + 1;
       indexesUsed.push(randomIndex);
       randomDino = dinos[randomIndex];
-      console.log(`The random dino is ${randomDino.fact} with index: ${randomIndex}`);
-      console.log(`The array of indexes is: ${indexesUsed}`);
+      console.log(`The random dino is ${randomDino.fact}`);
+      console.log(createTile(randomDino.species, compareWeight(randomDino, human)));
       // TODO: compare 3 randomDino with human
       // TODO: create tile for randomDino
     }
   } while(i < 8);
+
+  console.log(`The array of indexes is: ${indexesUsed}`);
 
   return tilesArray;
 }
