@@ -1,11 +1,12 @@
+// TODO: Create a const variable for the json file name
 // Get form button
 const button = document.getElementById('btn');
 
 // Fetch dino data from json file
 const dinos = (function (){
   let dinoArray = [''];
-  // Disable form button to prevent a comparison before the list of dinos
-  // has been populated.
+  // Disable form button to prevent a comparison before the entire list of
+  // dinos has been fetched.
   button.disabled = true;
 
   fetch('dino.json')
@@ -31,22 +32,30 @@ const humanData = (function (){
   return {
     getData: function (){
       return {
-      name: name.value,
-      height: (parseInt(feet.value) * 12) + parseInt(inches.value),
-      weight: parseInt(weight.value),
-      diet: diet.value
+        name: name.value,
+        height: (parseInt(feet.value) * 12) + parseInt(inches.value),
+        weight: parseInt(weight.value),
+        diet: diet.value
       };
     }
   };
 })();
 
-// Create Dino Constructor using functional mixins
+/**
+* @description Creates an Animal object using functional mixins
+* @constructor
+* @param {object} object - The object containing the Animal attributes
+* @returns {object} A new Animal object
+*/
 function Animal(object){
   return Object.assign({}, object);
 }
 
-// Create Dino Objects
-// @param array of all the dinos included in the json file
+/**
+* @description Creates a list of Dino Objects
+* @param {array} dinos - The list of all the dinos included in the json file
+* @returns {array} The list of new Dino Objects
+*/
 function createDinoObjects(dinos){
   const dinoObjects = [];
 
@@ -54,29 +63,49 @@ function createDinoObjects(dinos){
   return dinoObjects;
 }
 
-// Create Human Object
-// @param Object with the human data gathered from the form
+/**
+* @description Creates one Human Object
+* @constructor
+* @param {object} data - The object containing the human data from the form
+* @returns {object} A new Human Object
+*/
 function createHumanObject(data){
   return Animal(data);
 }
 
-
-// Create Dino Compare Method 1
-// NOTE: Weight in JSON file is in lbs, height in inches.
+/**
+* @description Compares the weight of a Dino and a Human
+* NOTE: Weight in JSON file is in lbs.
+* @param {object} dino - The Dino Object we want to compare
+* @param {object} human - The Human Object we want to compare
+* @returns {string} The fact to be displayed in the tile. Here is where
+* we explain the result of the comparison.
+*/
 function compareWeight(dino, human){
   const timesHeavier = dino.weight / human.weight;
   return `The ${dino.species} is ${parseInt(timesHeavier)} times heavier than you!`;
 }
 
-// Create Dino Compare Method 2
-// NOTE: Weight in JSON file is in lbs, height in inches.
+/**
+* @description Compares the height of a Dino and a Human
+* NOTE: Height in JSON file is in inches.
+* @param {object} dino - The Dino Object we want to compare
+* @param {object} human - The Human Object we want to compare
+* @returns {string} The fact to be displayed in the tile. Here is where
+* we explain the result of the comparison.
+*/
 function compareHeight(dino, human){
   const timesTaller = dino.height / human.height;
   return `The ${dino.species} is ${parseInt(timesTaller)} times taller than you!`;
 }
 
-// Create Dino Compare Method 3
-// NOTE: Weight in JSON file is in lbs, height in inches.
+/**
+* @description Compares the diet of a Dino and a Human
+* @param {object} dino - The Dino Object we want to compare
+* @param {object} human - The Human Object we want to compare
+* @returns {string} The fact to be displayed in the tile. Here is where
+* we explain the result of the comparison.
+*/
 function compareDiet(dino, human){
   if(dino.diet.toLowerCase() == human.diet.toLowerCase()){
     return `The ${dino.species} and you are both ${human.diet}!`;
@@ -85,6 +114,12 @@ function compareDiet(dino, human){
   }
 }
 
+/**
+* @description Creates a single div element with a title, an image and a fact
+* @param {object} dino - The Dino Object we want to display
+* @param {string} fact - The fact we want to include in the div element
+* @returns {object} The div element to be displayed in the grid
+*/
 function createTile(dino, fact){
   let newTile = document.createElement('div');
   newTile.className = 'grid-item';
@@ -95,8 +130,9 @@ function createTile(dino, fact){
     title.innerHTML = dino.species;
     img.src = 'images/' + dino.species.toLowerCase() + '.png';
     img.alt = 'An image of a ' + dino.species;
+    // TODO: Include the paragraph logic here
   } else {
-    // it is a human
+    // It is a human
     title.innerHTML = dino.name;
     img.src = 'images/human.png';
     img.alt = 'An image of a human';
@@ -108,6 +144,7 @@ function createTile(dino, fact){
 
   newTile.append(title);
   newTile.append(img);
+  // Only display the fact if the tile is a dino
   if(dino.hasOwnProperty('species')){
     newTile.append(para);
   }
@@ -115,13 +152,22 @@ function createTile(dino, fact){
   return newTile;
 }
 
-// Generate Tiles for each Dino in Array
+/**
+* @description Randomly generates one tile per Dino in the array. Only 3 dinos
+* will be compared with the human object. Each compare method is used only once.
+* @param {array} dinos - The list of Dino Objects we want to display
+* @param {object} human - The Human Object we want to compare
+* @returns {array} The list of tiles to be displayed in the grid after they
+* have been compared.
+*/
 function createTiles(dinos, human){
   let tilesArray = [];
   let indexesUsed = [];
   let randomIndex;
   let randomDino;
+  // The i index will make sure we visit all the dinos in the array only once
   let i = 0;
+  // The j index will make sure we use the 3 methods only once each
   let j = 0;
 
   do {
@@ -133,6 +179,7 @@ function createTiles(dinos, human){
       indexesUsed.push(randomIndex);
       randomDino = dinos[randomIndex];
 
+      // TODO: Elliminate the console.log statements
       if(randomDino.species.toLowerCase() == 'pigeon'){
         tilesArray.push(createTile(randomDino, randomDino.fact));
         console.log(createTile(randomDino.species, randomDino.fact));
@@ -153,12 +200,18 @@ function createTiles(dinos, human){
         console.log(createTile(randomDino.species, randomDino.fact));
       }
     }
+  // TODO: Change number 8 for the actual length of the array
   } while(i < 8);
 
   return tilesArray;
 }
 
-// Add tiles to DOM
+/**
+* @description Appends all dino tiles to the grid and generates a human tile
+* that is also appended to the middle of the grid.
+* @param {array} tiles - The list of Dino tiles we want to append
+* @param {object} human - The Human Object we want to append
+*/
 function addTilesToDOM(tiles, human){
   let grid = document.getElementById('grid');
   const humanTile = createTile(human, '');
@@ -179,7 +232,10 @@ function hideForm(){
   form.style.display = 'none';
 }
 
-// On button click, prepare and display infographic
+// On button click, generate dino and human objects, create tiles for each
+// object and add them to the grid (display infographic).
+// Finally, remove form from screen.
+// TODO: Eliminate all console.log statements
 button.addEventListener('click', () => {
   const dinoObjects = createDinoObjects(dinos);
   const human = createHumanObject(humanData.getData());
