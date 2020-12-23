@@ -1,6 +1,6 @@
-// TODO: Create a const variable for the json file name
 // Get form button
 const button = document.getElementById('btn');
+const JSONFILE = 'dino.json';
 
 // Fetch dino data from json file
 const dinos = (function (){
@@ -9,7 +9,7 @@ const dinos = (function (){
   // dinos has been fetched.
   button.disabled = true;
 
-  fetch('dino.json')
+  fetch(JSONFILE)
     .then(response => response.json())
     .then(data => dinoArray = data.Dinos)
     .then(enable => button.disabled = false)
