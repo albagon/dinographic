@@ -178,25 +178,19 @@ function createTiles(dinos, human){
       indexesUsed.push(randomIndex);
       randomDino = dinos[randomIndex];
 
-      // TODO: Elliminate the console.log statements
       if(randomDino.species.toLowerCase() == 'pigeon'){
         tilesArray.push(createTile(randomDino, randomDino.fact));
-        console.log(createTile(randomDino.species, randomDino.fact));
       } else if(j == 0) {
         j = j + 1;
         tilesArray.push(createTile(randomDino, compareWeight(randomDino, human)));
-        console.log(createTile(randomDino.species, compareWeight(randomDino, human)));
       } else if(j == 1) {
         j = j + 1;
         tilesArray.push(createTile(randomDino, compareHeight(randomDino, human)));
-        console.log(createTile(randomDino.species, compareHeight(randomDino, human)));
       } else if(j == 2) {
         j = j + 1;
         tilesArray.push(createTile(randomDino, compareDiet(randomDino, human)));
-        console.log(createTile(randomDino.species, compareDiet(randomDino, human)));
       } else {
         tilesArray.push(createTile(randomDino, randomDino.fact));
-        console.log(createTile(randomDino.species, randomDino.fact));
       }
     }
 } while(i < dinos.length);
@@ -233,14 +227,10 @@ function hideForm(){
 // On button click, generate dino and human objects, create tiles for each
 // object and add them to the grid (display infographic).
 // Finally, remove form from screen.
-// TODO: Eliminate all console.log statements
 button.addEventListener('click', () => {
   const dinoObjects = createDinoObjects(dinos);
   const human = createHumanObject(humanData.getData());
-  console.log(dinoObjects);
-  console.log(human);
   const tiles = createTiles(dinoObjects, human);
-  console.log(tiles);
   addTilesToDOM(tiles, human);
   hideForm();
 });
