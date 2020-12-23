@@ -130,7 +130,6 @@ function createTile(dino, fact){
     title.innerHTML = dino.species;
     img.src = 'images/' + dino.species.toLowerCase() + '.png';
     img.alt = 'An image of a ' + dino.species;
-    // TODO: Include the paragraph logic here
   } else {
     // It is a human
     title.innerHTML = dino.name;
@@ -200,8 +199,7 @@ function createTiles(dinos, human){
         console.log(createTile(randomDino.species, randomDino.fact));
       }
     }
-  // TODO: Change number 8 for the actual length of the array
-  } while(i < 8);
+} while(i < dinos.length);
 
   return tilesArray;
 }
