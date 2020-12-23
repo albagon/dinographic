@@ -108,7 +108,7 @@ function compareHeight(dino, human){
 */
 function compareDiet(dino, human){
   if(dino.diet.toLowerCase() == human.diet.toLowerCase()){
-    return `The ${dino.species} and you are both ${human.diet}!`;
+    return `Both the ${dino.species} and you are ${human.diet.toLowerCase()}!`;
   } else {
     return `The ${dino.species} is ${dino.diet} but you are ${human.diet.toLowerCase()}`;
   }
