@@ -23,11 +23,11 @@ const dinos = (function (){
 
 // Use IIFE to get human data from form
 const humanData = (function (){
-  let name = document.getElementById('name');
-  let feet = document.getElementById('feet');
-  let inches = document.getElementById('inches');
-  let weight = document.getElementById('weight');
-  let diet = document.getElementById('diet');
+  const name = document.getElementById('name');
+  const feet = document.getElementById('feet');
+  const inches = document.getElementById('inches');
+  const weight = document.getElementById('weight');
+  const diet = document.getElementById('diet');
 
   return {
     getData: function (){
@@ -121,10 +121,10 @@ function compareDiet(dino, human){
 * @returns {object} The div element to be displayed in the grid
 */
 function createTile(dino, fact){
-  let newTile = document.createElement('div');
+  const newTile = document.createElement('div');
   newTile.className = 'grid-item';
-  let title = document.createElement('h3');
-  let img = document.createElement('img');
+  const title = document.createElement('h3');
+  const img = document.createElement('img');
 
   if(dino.hasOwnProperty('species')){
     title.innerHTML = dino.species;
@@ -137,8 +137,8 @@ function createTile(dino, fact){
     img.alt = 'An image of a human';
   }
 
-  let para = document.createElement('p');
-  let text = document.createTextNode(fact);
+  const para = document.createElement('p');
+  const text = document.createTextNode(fact);
   para.appendChild(text);
 
   newTile.append(title);
@@ -160,8 +160,8 @@ function createTile(dino, fact){
 * have been compared.
 */
 function createTiles(dinos, human){
-  let tilesArray = [];
-  let indexesUsed = [];
+  const tilesArray = [];
+  const indexesUsed = [];
   let randomIndex;
   let randomDino;
   // The i index will make sure we visit all the dinos in the array only once
@@ -205,7 +205,7 @@ function createTiles(dinos, human){
 * @param {object} human - The Human Object we want to append
 */
 function addTilesToDOM(tiles, human){
-  let grid = document.getElementById('grid');
+  const grid = document.getElementById('grid');
   const humanTile = createTile(human, '');
   grid.appendChild(tiles[0]);
   grid.appendChild(tiles[1]);
@@ -220,7 +220,7 @@ function addTilesToDOM(tiles, human){
 
 // Remove form from screen
 function hideForm(){
-  let form = document.getElementById('dino-compare');
+  const form = document.getElementById('dino-compare');
   form.style.display = 'none';
 }
 
