@@ -166,22 +166,19 @@ function createTile(dino, fact){
 }
 
 /**
-* @description Randomly generates one tile per Dino in the array. Only 3 dinos
-* will be compared with the human object. Each compare method is used only once.
+* @description Randomly visits all the dinos. It compares the human object with
+* 3 dinos only, using one method each time and finally creates one tile per dino
 * @param {array} dinos - The list of Dino Objects we want to display
 * @param {object} human - The Human Object we want to compare
-* @returns {array} The list of tiles to be displayed in the grid after they
-* have been compared.
+* @returns {array} The list of tiles to be displayed in the grid
 */
 function createTiles(dinos, human){
-  const tilesArray = [];
+  const methods = [compareWeight, compareHeight, compareDiet];
   const indexesUsed = [];
-  let randomIndex;
-  let randomDino;
+  let randomIndex, randomDino;
   // The i index will make sure we visit all the dinos in the array only once
   let i = 0;
-  // The j index will make sure we use the 3 methods only once each
-  let j = 0;
+  const visitedDinos = []; // These dinos will be transformed into tiles
 
   do {
     randomIndex = Math.floor(Math.random() * dinos.length);
@@ -192,24 +189,17 @@ function createTiles(dinos, human){
       indexesUsed.push(randomIndex);
       randomDino = dinos[randomIndex];
 
-      if(randomDino.species.toLowerCase() == 'pigeon'){
-        tilesArray.push(createTile(randomDino, randomDino.fact));
-      } else if(j == 0) {
-        j = j + 1;
-        tilesArray.push(createTile(randomDino, compareWeight(randomDino, human)));
-      } else if(j == 1) {
-        j = j + 1;
-        tilesArray.push(createTile(randomDino, compareHeight(randomDino, human)));
-      } else if(j == 2) {
-        j = j + 1;
-        tilesArray.push(createTile(randomDino, compareDiet(randomDino, human)));
-      } else {
-        tilesArray.push(createTile(randomDino, randomDino.fact));
+      if(methods.length != 0 && randomDino.species.toLowerCase() != 'pigeon'){
+        // Compare using one method
+        randomDino.fact = methods.pop()(randomDino, human);
       }
+      visitedDinos.push(randomDino);
     }
-} while(i < dinos.length);
+  } while(i < dinos.length);
 
-  return tilesArray;
+  return visitedDinos.map(dino => {
+    return createTile(dino, dino.fact);
+  });
 }
 
 /**
