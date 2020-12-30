@@ -21,26 +21,6 @@ const dinos = (function (){
   };
 })();
 
-// Use IIFE to get human data from form
-const humanData = (function (){
-  const name = document.getElementById('name');
-  const feet = document.getElementById('feet');
-  const inches = document.getElementById('inches');
-  const weight = document.getElementById('weight');
-  const diet = document.getElementById('diet');
-
-  return {
-    getData: function (){
-      return {
-        name: name.value,
-        height: (parseInt(feet.value) * 12) + parseInt(inches.value),
-        weight: parseInt(weight.value),
-        diet: diet.value
-      };
-    }
-  };
-})();
-
 /**
 * @description Creates an Animal object using functional mixins
 * @constructor
@@ -69,8 +49,24 @@ function createDinoObjects(dinos){
 * @param {object} data - The object containing the human data from the form
 * @returns {object} A new Human Object
 */
-function createHumanObject(data){
-  return Animal(data);
+function createHumanObject(){
+  return Animal(
+    // Use IIFE to get human data from form
+    (function (){
+      const name = document.getElementById('name');
+      const feet = document.getElementById('feet');
+      const inches = document.getElementById('inches');
+      const weight = document.getElementById('weight');
+      const diet = document.getElementById('diet');
+
+      return {
+        name: name.value,
+        height: parseInt(feet.value) * 12 + parseInt(inches.value),
+        weight: parseInt(weight.value),
+        diet: diet.value
+      };
+    })()
+  );
 }
 
 /**
@@ -229,7 +225,7 @@ function hideForm(){
 // Finally, remove form from screen.
 button.addEventListener('click', () => {
   const dinoObjects = createDinoObjects(dinos);
-  const human = createHumanObject(humanData.getData());
+  const human = createHumanObject();
   const tiles = createTiles(dinoObjects, human);
   addTilesToDOM(tiles, human);
   hideForm();
