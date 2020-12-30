@@ -211,15 +211,10 @@ function createTiles(dinos, human){
 function addTilesToDOM(tiles, human){
   const grid = document.getElementById('grid');
   const humanTile = createTile(human, '');
-  grid.appendChild(tiles[0]);
-  grid.appendChild(tiles[1]);
-  grid.appendChild(tiles[2]);
-  grid.appendChild(tiles[3]);
-  grid.appendChild(humanTile);
-  grid.appendChild(tiles[4]);
-  grid.appendChild(tiles[5]);
-  grid.appendChild(tiles[6]);
-  grid.appendChild(tiles[7]);
+
+  // Add human tile to the middle of the tiles array
+  tiles.splice(parseInt(tiles.length/2), 0, humanTile);
+  tiles.forEach(tile => grid.appendChild(tile));
 }
 
 // Remove form from screen
