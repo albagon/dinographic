@@ -22,14 +22,58 @@ const dinos = (function (){
 })();
 
 /**
-* @description Creates an Animal object using functional mixins
+* @description Creates an Animal object
 * @constructor
 * @param {object} object - The object containing the Animal attributes
-* @returns {object} A new Animal object
 */
 function Animal(object){
-  return Object.assign({}, object);
+  this.name = object.name || '';
+  this.species = object.species;
+  this.weight = object.weight;
+  this.height = object.height;
+  this.diet = object.diet;
 }
+
+/**
+* @description Creates a Dino object
+* @constructor
+* @param {object} object - The object containing the Dinosaur attributes
+*/
+function Dino(object){
+  Animal.call(this, object)
+  this.where = object.where;
+  this.when = object.when;
+  this.fact = object.fact;
+}
+
+Dino.prototype = Object.create(Animal.prototype);
+Dino.prototype.constructor = Dino;
+
+/**
+* @description Creates a Human Object from user's input data
+* @constructor
+*/
+function Human(){
+  // We use an IIFE to get human data from form
+  Animal.call(this, (function (){
+    const name = document.getElementById('name');
+    const feet = document.getElementById('feet');
+    const inches = document.getElementById('inches');
+    const weight = document.getElementById('weight');
+    const diet = document.getElementById('diet');
+
+    return {
+      species: 'human',
+      name: name.value,
+      height: parseInt(feet.value) * 12 + parseInt(inches.value),
+      weight: parseInt(weight.value),
+      diet: diet.value
+    };
+  })());
+}
+
+Human.prototype = Object.create(Animal.prototype);
+Human.prototype.constructor = Human;
 
 /**
 * @description Creates a list of Dino Objects
@@ -39,34 +83,8 @@ function Animal(object){
 function createDinoObjects(dinos){
   const dinoObjects = [];
 
-  dinos.getList().forEach(ele => dinoObjects.push(Animal(ele)));
+  dinos.getList().forEach(ele => dinoObjects.push(new Dino(ele)));
   return dinoObjects;
-}
-
-/**
-* @description Creates one Human Object
-* @constructor
-* @param {object} data - The object containing the human data from the form
-* @returns {object} A new Human Object
-*/
-function createHumanObject(){
-  return Animal(
-    // Use IIFE to get human data from form
-    (function (){
-      const name = document.getElementById('name');
-      const feet = document.getElementById('feet');
-      const inches = document.getElementById('inches');
-      const weight = document.getElementById('weight');
-      const diet = document.getElementById('diet');
-
-      return {
-        name: name.value,
-        height: parseInt(feet.value) * 12 + parseInt(inches.value),
-        weight: parseInt(weight.value),
-        diet: diet.value
-      };
-    })()
-  );
 }
 
 /**
@@ -122,7 +140,7 @@ function createTile(dino, fact){
   const title = document.createElement('h3');
   const img = document.createElement('img');
 
-  if(dino.hasOwnProperty('species')){
+  if(dino.species != 'human'){
     title.innerHTML = dino.species;
     img.src = 'images/' + dino.species.toLowerCase() + '.png';
     img.alt = 'An image of a ' + dino.species;
@@ -140,7 +158,7 @@ function createTile(dino, fact){
   newTile.append(title);
   newTile.append(img);
   // Only display the fact if the tile is a dino
-  if(dino.hasOwnProperty('species')){
+  if(dino.species != 'human'){
     newTile.append(para);
   }
 
@@ -225,7 +243,7 @@ function hideForm(){
 // Finally, remove form from screen.
 button.addEventListener('click', () => {
   const dinoObjects = createDinoObjects(dinos);
-  const human = createHumanObject();
+  const human = new Human();
   const tiles = createTiles(dinoObjects, human);
   addTilesToDOM(tiles, human);
   hideForm();
